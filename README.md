@@ -1,6 +1,4 @@
-# Deep Learning
-
-# Mini-projects
+# Deep Learning Mini-projects
 
 ## https://fleuret.org/dlc/
 
@@ -13,7 +11,7 @@ auxiliary loss to help the training of the main objective.
 It should be implemented with PyTorch only code, in particular without using other external libraries
 such as scikit-learn or numpy.
 
-## 1 Data
+### 1 Data
 
 The goal of this project is to implement a deep network such that, given as input a series of 2× 14 × 14
 tensor, corresponding to pairs of 14×14 grayscale images, it predicts for each pair if the first digit is
@@ -73,13 +71,7 @@ Your framework must provide the necessary tools to:
 You must implement a test executable namedtest.pythat imports your framework and
 
 - Generates a training and a test set of 1,000 points sampled uniformly in [0,1]^2 , each with a
-    label 0 if outside the disk centered at (0. 5 , 0 .5) of radius 1/
-
-#### √
-
-```
-2 π, and 1 inside,
-```
+    label 0 if outside the disk centered at (0.5, 0.5) of radius $1/\sqrt{2π}$, and 1 inside,
 
 - builds a network with two input units, two output units, three hidden layers of 25 units,
 - trains it with MSE, logging the loss,
