@@ -24,7 +24,7 @@ experiments rapidly, even in the VM with a single core and no GPU.
 You can generate the data sets to use with the function generate_pair_sets(N) defined in the file
 dlc_practical_prologue.py. This function returns six tensors:
 
-```
+
 | Name | Tensor dimension | Type | Content |
 | :---: | :---: | :---: | :---: |
 | train_input | N×2×14×14 | float32 | Images |
@@ -33,7 +33,7 @@ dlc_practical_prologue.py. This function returns six tensors:
 | test_input | N×2×14×14 | float32 | Images |
 | test_target | N  | int64 | Class to predict ∈ { 0, 1 } |
 | test_classes | N×2 | int64 | Classes of the two digits ∈ { 0,..., 9 } |
-```
+
 ### 2 Objective
 
 The goal of the project is to compare different architectures, and assess the performance improvement
