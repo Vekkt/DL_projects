@@ -25,13 +25,14 @@ You can generate the data sets to use with the function generate_pair_sets(N) de
 dlc_practical_prologue.py. This function returns six tensors:
 
 ```
-Name Tensor dimension Type Content
-train_input N×2×14×14 float32 Images
-train_target N int64 Class to predict ∈ { 0, 1 }
-train_classes N×2 int64 Classes of the two digits ∈ { 0,..., 9 }
-test_input N×2×14×14 float32 Images
-test_target N int64 Class to predict ∈ { 0, 1 }
-test_classes N×2 int64 Classes of the two digits ∈ { 0,..., 9 }
+| Name          | Tensor dimension | Type    | Content                                  |
+|:-------------:|:----------------:|:-------:|:----------------------------------------:|
+| train_input   | N×2×14×14        | float32 | Images                                   |
+| train_target  | N                | int64   | Class to predict ∈ { 0, 1 }              |
+| train_classes | N×2              | int64   | Classes of the two digits ∈ { 0,..., 9 } |
+| test_input    | N×2×14×14        | float32 | Images                                   |
+| test_target   | N                | int64   | Class to predict ∈ { 0, 1 }              |
+| test_classes  | N×2              | int64   | Classes of the two digits ∈ { 0,..., 9 } |
 ```
 ### 2 Objective
 
@@ -71,7 +72,7 @@ Your framework must provide the necessary tools to:
 You must implement a test executable named test.pythat imports your framework and
 
 - Generates a training and a test set of 1'000 points sampled uniformly in [0,1]^2 , each with a
-    label 0 if outside the disk centered at (0.5, 0.5) of radius 1/\sqrt{2π}, and 1 inside,
+    label 0 if outside the disk centered at (0.5, 0.5) of radius 1/√2π, and 1 inside,
 
 - builds a network with two input units, two output units, three hidden layers of 25 units,
 - trains it with MSE, logging the loss,
