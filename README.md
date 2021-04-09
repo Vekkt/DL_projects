@@ -26,7 +26,7 @@ dlc_practical_prologue.py. This function returns six tensors:
 
 
 | Name | Tensor dimension | Type | Content |
-| :---: | --- | :---: | --- |
+| :---: | :---: | :---: | --- |
 | train_input | N×2×14×14 | float32 | Images |
 | train_target | N | int64 | Class to predict ∈ { 0, 1 } |
 | train_classes | N×2 | int64 | Classes of the two digits ∈ { 0,..., 9 } |
