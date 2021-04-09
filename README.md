@@ -71,7 +71,7 @@ Your framework must provide the necessary tools to:
 You must implement a test executable named test.pythat imports your framework and
 
 - Generates a training and a test set of 1'000 points sampled uniformly in [0,1]^2 , each with a
-    label 0 if outside the disk centered at (0.5, 0.5) of radius 1/$\sqrt{2π}$, and 1 inside,
+    label 0 if outside the disk centered at (0.5, 0.5) of radius 1/\sqrt{2π}, and 1 inside,
 
 - builds a network with two input units, two output units, three hidden layers of 25 units,
 - trains it with MSE, logging the loss,
