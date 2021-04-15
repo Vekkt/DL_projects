@@ -1,16 +1,17 @@
 from module import Module
+import functional as F
 
 class ReLU(Module):
     def _activation_function(self, x):
-        return x.mul((x > 0).float())
+        return F.relu(x)
         
     def _activation_gradient(self, x):
-        return (x > 0).float()
+        return F.drelu(x)
 
 
 class Tanh(Module):
     def _activation_function(self, x):
-        return (x.exp() - x.mul(-1).exp()) / (x.exp() + x.mul(-1).exp())
+        return F.tanh(x)
 
     def _activation_gradient(self, x):
-        return 4 * (x.exp() + x.mul(-1).exp()).pow(-2)
+        return F.dtanh(x)

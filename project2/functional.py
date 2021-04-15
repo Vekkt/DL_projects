@@ -5,3 +5,15 @@ def linear(input, weight, bias=None):
     if bias is not None:
         output += bias
     return output
+
+def relu(input):
+    return input * (input > 0)
+
+def drelu(input):
+    return 1. * (input > 0)
+
+def tanh(x):
+    return (x.exp() - x.mul(-1).exp()) / (x.exp() + x.mul(-1).exp())
+
+def dtanh(x):
+    return 4 * (x.exp() + x.mul(-1).exp()).pow(-2)
