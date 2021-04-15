@@ -11,7 +11,7 @@ auxiliary loss to help the training of the main objective.
 It should be implemented with PyTorch only code, in particular without using other external libraries
 such as scikit-learn or numpy.
 
-### 1 Data
+    ### 1 Data
 
 The goal of this project is to implement a deep network such that, given as input a series of 2×14×14
 tensor, corresponding to pairs of 14×14 grayscale images, it predicts for each pair if the first digit is
@@ -34,7 +34,7 @@ dlc_practical_prologue.py. This function returns six tensors:
 | test_target | N  | int64 | Class to predict ∈ { 0, 1 } |
 | test_classes | N×2 | int64 | Classes of the two digits ∈ { 0,..., 9 } |
 
-### 2 Objective
+    ### 2 Objective
 
 The goal of the project is to compare different architectures, and assess the performance improvement
 that can be achieved through weight sharing, or using auxiliary losses. For the latter, the training can
