@@ -1,4 +1,4 @@
-from torch import empty, Tensor
+from torch import empty
 
 def linear(input, weight, bias=None):
     output = input.matmul(weight.t())

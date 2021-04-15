@@ -2,8 +2,8 @@ from module import Module
 
 class ReLU(Module):
     def _activation_function(self, x):
-        return x[x > 0]
-
+        return x.mul((x > 0).float())
+        
     def _activation_gradient(self, x):
         return (x > 0).float()
 

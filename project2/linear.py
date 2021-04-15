@@ -42,7 +42,8 @@ class Linear(Module):
                 (self.weight, self.weight_grad),
                 (self.bias, self.bias_grad)
             ]
-        self.parameters = [(self.weight, self.weight_grad)]
+        else:
+            self.parameters = [(self.weight, self.weight_grad)]
 
 
 
