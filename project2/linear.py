@@ -16,7 +16,9 @@ class Linear(Module):
             self.bias = empty(out_features)
             self.bias_grad = empty(out_features)
             self._parameters.append(self.bias)
+            
         self.init_parameters()
+        self.register_parameters()
 
     def init_parameters(self): 
         init.xavier_normal_(self.weight)
@@ -34,13 +36,13 @@ class Linear(Module):
         self.weight_grad = gradwrtoutput.t().mm(self._input)
         return gradwrtoutput.mm(self.weight)
 
-    def param(self):
+    def register_parameters(self):
         if self.bias is not None:
-            return [
+            self.parameters = [
                 (self.weight, self.weight_grad),
                 (self.bias, self.bias_grad)
             ]
-        return [(self.weight, self.weight_grad)]
+        self.parameters = [(self.weight, self.weight_grad)]
 
 
 
