@@ -34,7 +34,7 @@ class Module:
             return tuple(grad(x).mul(t) for x, t in in_and_gradout)
 
     def param(self):
-        return NotImplementedError
+        return self._parameters
 
     def modules(self):
         return self._modules
