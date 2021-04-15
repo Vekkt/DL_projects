@@ -5,7 +5,7 @@
     - [x] Linear
     - [x] ReLU
     - [x] Tanh
-    - [ ] Sequential
+    - [x] Sequential
 - [ ] Loss functions:
     - [ ] MSE
     - [ ] Cross-entropy
