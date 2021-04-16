@@ -33,3 +33,6 @@ def dmse(x, y):
     else:
         n = n[0]
     return (x-y).mul(2./n)
+
+def crossentropy(x, y):
+    return x.exp().mul()
