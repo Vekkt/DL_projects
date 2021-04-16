@@ -7,7 +7,7 @@
     - [x] Tanh
     - [x] Sequential
 - [ ] Loss functions:
-    - [ ] MSE
+    - [x] MSE
     - [ ] Cross-entropy
 - [ ] Optimization
     - [ ] SGD
