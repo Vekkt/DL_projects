@@ -15,7 +15,7 @@ class Module:
     def _activation_gradient(self, x):
         return NotImplementedError
 
-    def __apply__(self, *input):
+    def __call__(self, *input):
         return self.forward(input)
 
     def forward(self, *input):

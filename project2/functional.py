@@ -17,3 +17,19 @@ def tanh(x):
 
 def dtanh(x):
     return 4 * (x.exp() + x.mul(-1).exp()).pow(-2)
+
+def mse(x, y):
+    n = x.size()
+    if not n:
+        n = 1
+    else:
+        n = n[0]
+    return (x-y).pow(2).sum().mul(1./n)
+
+def dmse(x, y):
+    n = x.size()
+    if not n:
+        n = 1
+    else:
+        n = n[0]
+    return (x-y).mul(2./n)
