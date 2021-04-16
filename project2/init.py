@@ -14,16 +14,6 @@ def _calculate_fan_in_and_fan_out(tensor):
 
     return fan_in, fan_out
 
-def kaiming_uniform_(tensor, a=0, mode='fan_in', nonlinearity='leaky_relu'):
-    fan = _calculate_correct_fan(tensor, mode)
-    gain = calculate_gain(nonlinearity, a)
-    std = gain / math.sqrt(fan)
-    
-    bound = math.sqrt(3.0) * std
-    with torch.no_grad():
-        return tensor.uniform_(-bound, bound)
-
-
 def xavier_normal_(tensor, gain=1.):
     fan_in, fan_out = _calculate_fan_in_and_fan_out(tensor)
     std = gain * math.sqrt(2.0 / float(fan_in + fan_out))
