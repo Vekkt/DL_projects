@@ -3,7 +3,9 @@ from module import Module
 class Sequential(Module):
     def __init__(self, *args):
         for module in args:
-            self.modules.append(module)
+            self._modules.append(module)
+            for p in module.param():
+                self._parameters.append(p)
     
     def _activation_function(self, input):
         for module in self.modules:
