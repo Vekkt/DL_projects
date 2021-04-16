@@ -1,7 +1,7 @@
 ### TODO
 
 - [x] Module Interface
-- [ ] Main Modules:
+- [x] Main Modules:
     - [x] Linear
     - [x] ReLU
     - [x] Tanh
