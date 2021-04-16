@@ -9,11 +9,9 @@ class Module:
         self._modules = []
         self._input = ()
 
-    @abstractmethod
     def _activation_function(self, x):
         return NotImplementedError
 
-    @abstractmethod
     def _activation_gradient(self, x):
         return NotImplementedError
 
