@@ -49,15 +49,16 @@ def train_model(model, train_input, train_target):
     l = []
 
     for e in range(nb_epochs):
-        batch_loss = tensor(0.)
+        batch_loss = 0
         for b in range(0, train_input.size(0), mini_batch_size):
             output = model(train_input.narrow(0, b, mini_batch_size))
             loss = criterion(output, train_target.narrow(0, b, mini_batch_size))
+            
             model.zero_grad()
             criterion.backward()
             optimizer.step()
 
-            batch_loss += loss
+            batch_loss += loss.float()
         l.append(batch_loss)
     plt.plot(range(nb_epochs), l)
     plt.show()
