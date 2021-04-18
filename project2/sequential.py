@@ -9,11 +9,11 @@ class Sequential(Module):
                 self._parameters.append(p)
     
     def _activation_function(self, input):
-        for module in self.modules:
+        for module in self._modules:
             input = module(input)
         return input
 
     def _activation_gradient(self, gradwrtoutput):
-        for module in reversed(self.modules):
+        for module in reversed(self._modules):
             grad = module._activation_gradient(gradwrtoutput)
         return grad
