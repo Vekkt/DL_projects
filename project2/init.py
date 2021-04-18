@@ -1,3 +1,5 @@
+from math import sqrt
+
 def _calculate_fan_in_and_fan_out(tensor):
     dimensions = tensor.dim()
     if dimensions < 2:
@@ -16,6 +18,6 @@ def _calculate_fan_in_and_fan_out(tensor):
 
 def xavier_normal_(tensor, gain=1.):
     fan_in, fan_out = _calculate_fan_in_and_fan_out(tensor)
-    std = gain * math.sqrt(2.0 / float(fan_in + fan_out))
+    std = gain * sqrt(2.0 / float(fan_in + fan_out))
 
     return tensor.normal_(0., std)
