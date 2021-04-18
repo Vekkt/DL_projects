@@ -19,11 +19,6 @@ def dtanh(x):
     return 4 * (x.exp() + x.mul(-1).exp()).pow(-2)
 
 def mse(x, y):
-    n = x.size()
-    if not n:
-        n = 1
-    else:
-        n = n[0]
     return (x-y).pow(2).mean()
 
 def dmse(x, y):
