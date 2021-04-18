@@ -15,15 +15,16 @@ class Module:
     def _activation_gradient(self, x):
         return NotImplementedError
 
-    def __call__(self, *input):
+    def __call__(self, input):
         return self.forward(input)
 
     def forward(self, *input):
-        self._input = input
         activ = self._activation_function
         if len(input) == 1:
-            return activ(self._input[0])
+            self._input = input[0]
+            return activ(self._input)
         else:
+            self._input = input
             return tuple(activ(t) for t in self._input)
 
     def backward(self, *gradwrtoutput):
