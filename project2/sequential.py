@@ -17,11 +17,9 @@ class Sequential(Module):
         grad = gradwrtoutput
         for module in reversed(self._modules):
             grad = module._activation_gradient(grad)
-        self.register_parameters()
         return grad
 
     def register_parameters(self):
-        self._parameters = []
         for module in self._modules:
             for p in module.parameters():
                 self._parameters.append(p)
