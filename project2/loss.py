@@ -11,6 +11,3 @@ class MSELoss(Module):
 
     def __call__(self, input, target):
         return self.forward(input, target)
-
-class CrossEntropyLoss(Module):
-    
