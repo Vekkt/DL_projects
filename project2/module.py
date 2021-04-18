@@ -30,7 +30,7 @@ class Module:
     def backward(self, *gradwrtoutput):
         grad = self._activation_gradient
         if len(gradwrtoutput) == 1:
-            return grad(self._input[0]).mul(gradwrtoutput[0])
+            return grad(self._input).mul(gradwrtoutput[0])
         else:
             in_and_gradout = zip(self._input, gradwrtoutput)
             return tuple(grad(x).mul(t) for x, t in in_and_gradout)
