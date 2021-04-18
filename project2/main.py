@@ -48,7 +48,7 @@ def train_model(model, train_input, train_target):
     nb_epochs = 250
     l = []
 
-    for e in range(nb_epochs):
+    for _ in range(nb_epochs):
         batch_loss = 0
         for b in range(0, train_input.size(0), mini_batch_size):
             output = model(train_input.narrow(0, b, mini_batch_size))

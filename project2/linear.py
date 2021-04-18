@@ -29,10 +29,11 @@ class Linear(Module):
             bound = 1 / math.sqrt(fan_in)
             self.bias.uniform_(-bound, bound)
 
-    def _activation_function(self, input):
+    def forward(self, input):
+        self._input = input
         return F.linear(input, self.weight, self.bias)
 
-    def _activation_gradient(self, gradwrtoutput):
+    def backward(self, gradwrtoutput):
         if self.bias is not None:
             self.bias_grad.zero_()
             self.bias_grad.add_(gradwrtoutput.sum())

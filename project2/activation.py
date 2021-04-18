@@ -6,11 +6,11 @@ class ReLU(Module):
         super(ReLU, self).__init__()
         self.name = name
         
-    def _activation_function(self, x):
-        return F.relu(x)
+    def forward(self, input):
+        return F.relu(input)
         
-    def _activation_gradient(self, x):
-        return F.drelu(x)
+    def backward(self, gradwrtoutput):
+        return F.drelu(gradwrtoutput)
 
 
 class Tanh(Module):
@@ -18,8 +18,8 @@ class Tanh(Module):
         super(Tanh, self).__init__()
         self.name = name
         
-    def _activation_function(self, x):
-        return F.tanh(x)
+    def forward(self, input):
+        return F.tanh(input)
 
-    def _activation_gradient(self, x):
-        return F.dtanh(x)
+    def backward(self, gradwrtoutput):
+        return F.dtanh(gradwrtoutput)

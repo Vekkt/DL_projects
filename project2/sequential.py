@@ -1,5 +1,7 @@
 from module import Module
-
+''' Sequential module class. Represents a sequence
+    of modules executed in series.
+'''
 class Sequential(Module):
     def __init__(self, *args):
         super(Sequential, self).__init__()
@@ -8,15 +10,15 @@ class Sequential(Module):
         self.register_parameters()
         self.name = 'sequential'
     
-    def _activation_function(self, input):
+    def forward(self, input):
         for module in self._modules:
             input = module(input)
         return input
 
-    def _activation_gradient(self, gradwrtoutput):
+    def backward(self, gradwrtoutput):
         grad = gradwrtoutput
         for module in reversed(self._modules):
-            grad = module._activation_gradient(grad)
+            grad = module.backward(grad)
         return grad
 
     def register_parameters(self):
