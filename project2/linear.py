@@ -5,12 +5,13 @@ import init
 import math
 
 class Linear(Module):
-    def __init__(self, in_features: int, out_features: int, bias: bool = True):
+    def __init__(self, in_features: int, out_features: int, bias: bool=True, name=''):
         super(Linear, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
         self.weight = empty(out_features, in_features)
         self.weight_grad = empty(out_features, in_features)
+        self.name = name
 
         if bias:
             self.bias = empty(out_features)
@@ -33,8 +34,9 @@ class Linear(Module):
     def _activation_gradient(self, gradwrtoutput):
         if self.bias is not None:
             self.bias_grad = gradwrtoutput.sum(0)
-        self.weight_grad = gradwrtoutput.t().mm(self._input)
-        return gradwrtoutput.mm(self.weight)
+        self.weight_grad = gradwrtoutput.t().matmul(self._input)
+        self.register_parameters()
+        return gradwrtoutput.matmul(self.weight)
 
     def register_parameters(self):
         if self.bias is not None:
