@@ -38,12 +38,12 @@ class Linear(Module):
 
     def register_parameters(self):
         if self.bias is not None:
-            self.parameters = [
+            self._parameters = [
                 (self.weight, self.weight_grad),
                 (self.bias, self.bias_grad)
             ]
         else:
-            self.parameters = [(self.weight, self.weight_grad)]
+            self._parameters = [(self.weight, self.weight_grad)]
 
 
 
