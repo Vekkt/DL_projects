@@ -8,8 +8,6 @@
     - [x] Sequential
 - [ ] Loss functions:
     - [x] MSE
-    - [ ] Cross-entropy
 - [ ] Optimization
     - [ ] SGD
-    - [ ] Other stuff ?
 
