@@ -35,10 +35,8 @@ class Linear(Module):
 
     def backward(self, gradwrtoutput):
         if self.bias is not None:
-            self.bias_grad.zero_()
             self.bias_grad.add_(gradwrtoutput.sum())
 
-        self.weight_grad.zero_()
         self.weight_grad.add_(gradwrtoutput.t().matmul(self._input))
         return gradwrtoutput.matmul(self.weight)
 
