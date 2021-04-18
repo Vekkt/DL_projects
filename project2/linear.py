@@ -33,7 +33,7 @@ class Linear(Module):
 
     def _activation_gradient(self, gradwrtoutput):
         if self.bias is not None:
-            self.bias_grad = gradwrtoutput.sum(0)
+            self.bias_grad = gradwrtoutput.sum()
         self.weight_grad = gradwrtoutput.t().matmul(self._input)
         self.register_parameters()
         return gradwrtoutput.matmul(self.weight)
