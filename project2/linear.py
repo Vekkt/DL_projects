@@ -34,6 +34,9 @@ class Linear(Module):
         return F.linear(input, self.weight, self.bias)
 
     def backward(self, gradwrtoutput):
+        '''_grad should be 0 when called
+        due to model.zero_grad()
+        so add_ simply updates the tensor'''
         if self.bias is not None:
             self.bias_grad.add_(gradwrtoutput.sum())
 
