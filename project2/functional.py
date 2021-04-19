@@ -22,9 +22,4 @@ def mse(x, y):
     return (x-y).pow(2).mean()
 
 def dmse(x, y):
-    n = x.size()
-    if not n:
-        n = 1
-    else:
-        n = n[0]
-    return (x-y).mul(2./n)
+    return (x-y).mul(2).div(x.numel())
