@@ -8,18 +8,6 @@ from torch import empty, set_grad_enabled, tensor, manual_seed
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-
-manual_seed(0)
-
-def pp(array):
-    for p, g in array:
-        print('parameter:')
-        print(p)
-        print('gradient:')
-        print(g)
-        print('--------------')
-
-
 set_grad_enabled(False)
 
 def generate_disc_set(nb):
@@ -43,7 +31,6 @@ def CrossEntropyLoss(input, target):
 
 
 def compute_nb_errors(model, data_input, data_target):
-
     nb_data_errors = 0
 
     for b in range(0, data_input.size(0), mini_batch_size):
@@ -66,11 +53,10 @@ def train_model(model, train_input, train_target):
 
     for _ in tqdm(range(nb_epochs)):
         batch_loss = 0
-        for b in range(0, train_input.size(0), 1):
-            # output = model(train_input.narrow(0, b, mini_batch_size))
-            # fit = loss(output, train_target.narrow(0, b, mini_batch_size))
-            output = model(train_input[b])
-            fit = loss(output, train_target[b])
+        for b in range(0, train_input.size(0), mini_batch_size):
+            output = model(train_input.narrow(0, b, mini_batch_size))
+            fit = loss(output, train_target.narrow(0, b, mini_batch_size))
+            
             model.zero_grad()
             loss.backward()
             optimizer.step()
@@ -79,38 +65,13 @@ def train_model(model, train_input, train_target):
         l.append(batch_loss)
         
     plt.plot(range(nb_epochs), l)
-    plt.show()
 
-
-# model = Sequential(
-#     Linear(2, 25, name='linear 1'),
-#     ReLU('relu 1'),
-#     Linear(25, 2, name='linear 2')
-# )
-
-# train_model(model, train_input, train_target)
-# print(compute_nb_errors(model, test_input, test_target))
-
-n = 2
-input = train_input[:n]
-target = train_target[:n]
-
-print(input)
 model = Sequential(
-    Linear(2, 2),
-    ReLU()
+    Linear(2, 25, name='linear 1'),
+    ReLU('relu 1'),
+    Linear(25, 2, name='linear 2')
 )
-optimizer = SGD(model, lr=1)
-loss = MSELoss(model)
-# model = Linear(2, 2)
-for i in range(n):
-    output = model(input[i])
-    fit = loss(output, target[i])
-    model.zero_grad()
-    pp(model.parameters())
-    loss.backward()
-    optimizer.step()
-    print('backward pass done')
-    pp(model.parameters())
-    pp(model.parameters())
-    print(output)
+
+train_model(model, train_input, train_target)
+print("error rate: {}%".format(compute_nb_errors(model, test_input, test_target) / len(test_input) * 100))
+plt.show()
