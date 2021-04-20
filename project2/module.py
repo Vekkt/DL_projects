@@ -44,5 +44,5 @@ class Module:
         return self._modules
 
     def zero_grad(self):
-        for p, grad in self._parameters:
+        for _, grad in self._parameters:
             grad.zero_()
