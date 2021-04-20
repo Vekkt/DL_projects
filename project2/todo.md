@@ -6,8 +6,8 @@
     - [x] ReLU
     - [x] Tanh
     - [x] Sequential
-- [ ] Loss functions:
+- [x] Loss functions:
     - [x] MSE
-- [ ] Optimization
-    - [ ] SGD
+- [x] Optimization
+    - [x] SGD
 
