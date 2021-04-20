@@ -39,9 +39,11 @@ class Linear(Module):
         so add_ simply updates the tensor'''
         if self.bias is not None:
             self.bias_grad.add_(gradwrtoutput.mean(axis=0))
-
-        self.weight_grad.add_(gradwrtoutput.outer(self._input))
-        # self.weight_grad.add_(gradwrtoutput.t().matmul(self._input))
+        
+        if self._input.dim() == 1: # if we process a single sample
+            self.weight_grad.add_(gradwrtoutput.outer(self._input))
+        else: # if we process a batch
+            self.weight_grad.add_(gradwrtoutput.t().matmul(self._input))
         return gradwrtoutput.matmul(self.weight)
 
     def register_parameters(self):
