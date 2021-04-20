@@ -7,10 +7,11 @@ class ReLU(Module):
         self.name = name
         
     def forward(self, input):
+        self._input = input
         return F.relu(input)
         
     def backward(self, gradwrtoutput):
-        return F.drelu(gradwrtoutput)
+        return gradwrtoutput * F.drelu(self._input)
 
 
 class Tanh(Module):
@@ -19,7 +20,8 @@ class Tanh(Module):
         self.name = name
         
     def forward(self, input):
+        self._input = input
         return F.tanh(input)
 
     def backward(self, gradwrtoutput):
-        return F.dtanh(gradwrtoutput)
+        return gradwrtoutput * F.dtanh(self._input)
