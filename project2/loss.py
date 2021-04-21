@@ -9,10 +9,15 @@ class MSELoss(Module):
     def forward(self, input, target):
         self._input = input
         self._target = target
-        return F.mse(input, target)
+        self._loss = F.mse(input, target)
+        return self
 
     def backward(self):
         return self._model.backward(F.dmse(self._input, self._target))
 
     def __call__(self, input, target):
         return self.forward(input, target)
+
+    def __add__(self, other):
+        return other + self._loss
+

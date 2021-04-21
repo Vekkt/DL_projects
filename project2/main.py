@@ -42,7 +42,7 @@ def compute_nb_errors(model, data_input, data_target, mini_batch_size=100):
 
 
 def train_model(model, train_input, train_target, mini_batch_size=50):
-    loss = MSELoss(model)
+    creterion = MSELoss(model)
     optimizer = SGD(model.parameters())
     nb_epochs = 500
     l = []
@@ -53,13 +53,13 @@ def train_model(model, train_input, train_target, mini_batch_size=50):
         batch_loss = 0
         for b in range(0, train_input.size(0), mini_batch_size):
             output = model(train_input.narrow(0, b, mini_batch_size))
-            fit = loss(output, train_target.narrow(0, b, mini_batch_size))
+            loss = creterion(output, train_target.narrow(0, b, mini_batch_size))
             
             model.zero_grad()
             loss.backward()
             optimizer.step()
 
-            batch_loss += fit
+            batch_loss = loss + batch_loss
         l.append(batch_loss)
         
     plt.plot(range(nb_epochs), l)
