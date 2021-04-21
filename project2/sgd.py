@@ -4,9 +4,9 @@
     the gradient values for each parameter.
 '''
 class SGD():
-    def __init__(self, model, lr=1e-1):
+    def __init__(self, params, lr=1e-1):
         assert(lr>0)
-        self._model = model
+        self._parameters = params
         self._lr = lr
 
     ''' Makes one step for the gradient descent algorithm
@@ -18,5 +18,5 @@ class SGD():
         values update everywhere.
     '''
     def step(self):
-        for p, grad in self._model.parameters():
+        for p, grad in self._parameters:
             p.add_(grad, alpha=-self._lr)

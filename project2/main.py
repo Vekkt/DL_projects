@@ -4,7 +4,7 @@ from linear import Linear
 from sequential import Sequential
 from activation import ReLU, Tanh
 from math import pi
-from torch import empty, set_grad_enabled, tensor, manual_seed
+from torch import empty, set_grad_enabled
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
@@ -20,17 +20,15 @@ def generate_disc_set(nb):
 
 
 train_input, train_target = generate_disc_set(1000)
-test_input, test_target = generate_disc_set(1000)
-
-mini_batch_size = 100
+test_input, test_target = generate_disc_set(10000)
 
 set_grad_enabled(False)
 
 def CrossEntropyLoss(input, target):
-    return -input[:, target] + input.exp().sum(axis=1).log()
+    return input[:, target].mul(-1).add(input.exp().sum(axis=1).log())
 
 
-def compute_nb_errors(model, data_input, data_target):
+def compute_nb_errors(model, data_input, data_target, mini_batch_size=100):
     nb_data_errors = 0
 
     for b in range(0, data_input.size(0), mini_batch_size):
@@ -43,10 +41,10 @@ def compute_nb_errors(model, data_input, data_target):
     return nb_data_errors
 
 
-def train_model(model, train_input, train_target):
+def train_model(model, train_input, train_target, mini_batch_size=50):
     loss = MSELoss(model)
-    optimizer = SGD(model, lr=1e-1)
-    nb_epochs = 250
+    optimizer = SGD(model.parameters())
+    nb_epochs = 500
     l = []
     
     stop_at, i = 2, 1
@@ -61,7 +59,7 @@ def train_model(model, train_input, train_target):
             loss.backward()
             optimizer.step()
 
-            batch_loss += fit.float()
+            batch_loss += fit
         l.append(batch_loss)
         
     plt.plot(range(nb_epochs), l)
@@ -73,5 +71,5 @@ model = Sequential(
 )
 
 train_model(model, train_input, train_target)
-print("error rate: {}%".format(compute_nb_errors(model, test_input, test_target) / len(test_input) * 100))
+print("error rate: {:.2f}%".format(compute_nb_errors(model, test_input, test_target) / len(test_input) * 100))
 plt.show()
