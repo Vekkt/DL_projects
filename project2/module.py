@@ -20,6 +20,16 @@ class Module:
     def __call__(self, input):
         return self.forward(input)
 
+    def parameters(self):
+        return self._parameters
+
+    def modules(self):
+        return self._modules
+
+    def zero_grad(self):
+        for _, grad in self._parameters:
+            grad.zero_()
+
     # def forward(self, *input):
     #     activ = self.forward
     #     if len(input) == 1:
@@ -37,12 +47,3 @@ class Module:
     #         in_and_gradout = zip(self._input, gradwrtoutput)
     #         return tuple(grad(x).mul(t) for x, t in in_and_gradout)
 
-    def parameters(self):
-        return self._parameters
-
-    def modules(self):
-        return self._modules
-
-    def zero_grad(self):
-        for _, grad in self._parameters:
-            grad.zero_()
