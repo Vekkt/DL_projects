@@ -24,12 +24,10 @@ class Loss(Module):
 
 class MSELoss(Loss):
     def __init__(self, model):
-        forward_fun = F.mse
-        backward_fun = F.dmse
-        super(MSELoss, self).__init__(model, forward_fun, backward_fun)
+        super(MSELoss, self).__init__(
+            model, F.mse, F.dmse)
 
 class CrossEntropyLoss(Loss):
     def __init__(self, model):
-        forward_fun = F.cross_entropy
-        backward_fun = F.dcross_entropy
-        super(CrossEntropyLoss, self).__init__(model, forward_fun, backward_fun)
+        super(CrossEntropyLoss, self).__init__(
+            model, F.cross_entropy, F.dcross_entropy)
