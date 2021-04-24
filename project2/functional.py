@@ -1,5 +1,4 @@
 from torch import empty
-import torch
 
 def linear(x, weight, bias=None):
     output = x.matmul(weight.t())

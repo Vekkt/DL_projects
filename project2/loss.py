@@ -1,6 +1,5 @@
 from module import Module
 import functional as F
-from torch import set_grad_enabled
 
 class MSELoss(Module):
     def __init__(self, model):
