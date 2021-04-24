@@ -1,16 +1,17 @@
 from torch import empty
+import torch
 
-def linear(input, weight, bias=None):
-    output = input.matmul(weight.t())
+def linear(x, weight, bias=None):
+    output = x.matmul(weight.t())
     if bias is not None:
         output += bias
     return output
 
-def relu(input):
-    return input * (input > 0)
+def relu(x):
+    return x * (x > 0)
 
-def drelu(input):
-    return 1. * (input > 0)
+def drelu(x):
+    return 1. * (x > 0)
 
 def tanh(x):
     return (x.exp() - x.mul(-1).exp()) / (x.exp() + x.mul(-1).exp())
@@ -23,3 +24,13 @@ def mse(x, y):
 
 def dmse(x, y):
     return (x-y).mul(2).div(x.numel())
+
+def cross_entropy(x, y):
+    p = x.new_zeros(y.size(0), x.shape[1]).scatter(1, y.view(-1, 1), 1)
+    q = x.exp().div(x.exp().sum(axis=1).view(-1, 1).repeat(1, x.shape[1]))
+    return (p.mul(q.log())).mean(axis=0).sum().mul(-1)
+
+def dcross_entropy(x, y):
+    p = x.new_zeros(y.size(0), x.shape[1]).scatter(1, y.view(-1, 1), 1)
+    q = x.exp().div(x.exp().sum(axis=1).view(-1, 1).repeat(1, x.shape[1]))
+    return q.sub(p)
