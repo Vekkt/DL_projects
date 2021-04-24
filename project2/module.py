@@ -1,9 +1,6 @@
-from torch import set_grad_enabled
 from abc import abstractmethod
 
-set_grad_enabled(False)
 ''' Module class. Represents a PyTorch module.
-
 '''
 class Module:
     def __init__(self):
@@ -11,9 +8,11 @@ class Module:
         self._modules = []
         self._input = ()
 
+    @abstractmethod
     def forward(self, *input):
         return NotImplementedError
 
+    @abstractmethod
     def backward(self, *gradwrtoutput):
         return NotImplementedError
 
