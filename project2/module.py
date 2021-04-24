@@ -17,9 +17,6 @@ class Module:
     def backward(self, *gradwrtoutput):
         return NotImplementedError
 
-    def __call__(self, input):
-        return self.forward(input)
-
     def parameters(self):
         return self._parameters
 
@@ -30,20 +27,5 @@ class Module:
         for _, grad in self._parameters:
             grad.zero_()
 
-    # def forward(self, *input):
-    #     activ = self.forward
-    #     if len(input) == 1:
-    #         self._input = input[0]
-    #         return activ(self._input)
-    #     else:
-    #         self._input = input
-    #         return tuple(activ(t) for t in self._input)
-
-    # def backward(self, *gradwrtoutput):
-    #     grad = self.backward
-    #     if len(gradwrtoutput) == 1:
-    #         return grad(self._input).mul(gradwrtoutput[0])
-    #     else:
-    #         in_and_gradout = zip(self._input, gradwrtoutput)
-    #         return tuple(grad(x).mul(t) for x, t in in_and_gradout)
-
+    def __call__(self, input):
+        return self.forward(input)
