@@ -13,7 +13,7 @@ from tqdm import tqdm
 def generate_disc_set(nb, one_hot=True):
     input = empty(nb, 2).uniform_(-1, 1)
     val = input.pow(2).sum(1).sub(2 / pi).sign().add(1).div(2).long()
-    if one_hot:
+    if not one_hot:
         target = empty(nb, 2).zero_()
         for idx, y in enumerate(target):
             y[val[idx]] = 1
@@ -31,7 +31,7 @@ def compute_nb_errors(model, data_input, data_target, mini_batch_size=100, one_h
         _, predicted_classes = output.max(axis=1)
         for k in range(mini_batch_size):
             target = data_target[b + k]
-            if one_hot:
+            if not one_hot:
                 target = target.argmax()
             if target != predicted_classes[k]:
                 nb_data_errors = nb_data_errors + 1
@@ -39,7 +39,7 @@ def compute_nb_errors(model, data_input, data_target, mini_batch_size=100, one_h
 
 
 def train_model(model, train_input, train_target, mini_batch_size=100, one_hot=True):
-    creterion = MSELoss(model) if one_hot else CrossEntropyLoss(model)
+    creterion = MSELoss(model) if not one_hot else CrossEntropyLoss(model)
     optimizer = SGD(model.parameters())
     nb_epochs = 1000
     l = []
