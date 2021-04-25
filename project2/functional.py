@@ -23,12 +23,17 @@ def mse(x, y):
 def dmse(x, y):
     return (x-y).mul(2).div(x.numel())
 
+def softmax(x):
+    e = x.exp()
+    return e.div(e.sum(axis=1).view(-1, 1))
+
+def log_softmax(x):
+    return softmax(x).log()
+
 def cross_entropy(x, y):
     p = x.new_zeros(y.size(0), x.size(1)).scatter(1, y.view(-1, 1), 1)
-    q = x.exp().div(x.exp().sum(axis=1).view(-1, 1).repeat(1, x.size(1)))
-    return (p.mul(q.log())).mean(axis=0).sum().mul(-1)
+    return p.mul(log_softmax(x)).mean(axis=0).sum().mul(-1)
 
 def dcross_entropy(x, y):
     p = x.new_zeros(y.size(0), x.size(1)).scatter(1, y.view(-1, 1), 1)
-    q = x.exp().div(x.exp().sum(axis=1).view(-1, 1).repeat(1, x.size(1)))
-    return q.sub(p)
+    return log_softmax(x).sub(p)
