@@ -10,20 +10,18 @@ from tqdm import tqdm
 
 ###############################################################################
 
-def generate_disc_set(nb, one_hot=True):
+def generate_disc_set(nb, one_hot=False):
     input = empty(nb, 2).uniform_(-1, 1)
-    val = input.pow(2).sum(1).sub(2 / pi).sign().add(1).div(2).long()
+    target = input.pow(2).sum(1).sub(2 / pi).sign().add(1).div(2).long()
     if not one_hot:
-        target = empty(nb, 2).zero_()
-        for idx, y in enumerate(target):
-            y[val[idx]] = 1
-    else:
-        target = val
+        target = target.new_zeros(
+            target.size(0), 
+            input.size(1)).scatter(1, target.view(-1, 1), 1)
     return input, target
 
 ###############################################################################
 
-def compute_nb_errors(model, data_input, data_target, mini_batch_size=100, one_hot=True):
+def compute_nb_errors(model, data_input, data_target, mini_batch_size=100, one_hot=False):
     nb_data_errors = 0
 
     for b in range(0, data_input.size(0), mini_batch_size):
@@ -38,10 +36,10 @@ def compute_nb_errors(model, data_input, data_target, mini_batch_size=100, one_h
     return nb_data_errors
 
 
-def train_model(model, train_input, train_target, mini_batch_size=100, one_hot=True):
+def train_model(model, train_input, train_target, mini_batch_size=100, one_hot=False):
     creterion = MSELoss(model) if not one_hot else CrossEntropyLoss(model)
-    optimizer = SGD(model.parameters())
-    nb_epochs = 1000
+    optimizer = SGD(model.parameters(), lr=5e-2, momentum=0.5)
+    nb_epochs = 100
     l = []
 
     for _ in tqdm(range(nb_epochs)):
@@ -63,8 +61,8 @@ def train_model(model, train_input, train_target, mini_batch_size=100, one_hot=T
 
 set_grad_enabled(False)
 
-one_hot = True
-train_input, train_target = generate_disc_set(1000, one_hot)
+one_hot = False
+train_input, train_target = generate_disc_set(10000, one_hot)
 test_input, test_target = generate_disc_set(1000, one_hot)
 
 model = Sequential(
