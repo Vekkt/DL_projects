@@ -24,8 +24,9 @@ def dmse(x, y):
     return (x-y).mul(2).div(x.numel())
 
 def softmax(x):
-    e = x.exp()
-    return e.div(e.sum(axis=1).view(-1, 1))
+    # Exponential with normalization trick
+    e = x.sub(x.max(dim=1)[0].view(-1,1)).exp()
+    return e.div(e.sum(axis=1).view(-1,1))
 
 def log_softmax(x):
     return softmax(x).log()
@@ -36,4 +37,4 @@ def cross_entropy(x, y):
 
 def dcross_entropy(x, y):
     p = x.new_zeros(y.size(0), x.size(1)).scatter(1, y.view(-1, 1), 1)
-    return log_softmax(x).sub(p)
+    return softmax(x).sub(p)

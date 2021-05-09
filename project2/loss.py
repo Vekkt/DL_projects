@@ -22,6 +22,9 @@ class Loss(Module):
     def __add__(self, other):
         return other + self._loss
 
+    def __repr__(self):
+        return str(self._loss)
+
 class MSELoss(Loss):
     def __init__(self, model):
         super(MSELoss, self).__init__(
