@@ -25,8 +25,7 @@ class Linear(Module):
     def init_parameters(self): 
         init.xavier_normal_(self.weight)
         if self.bias is not None:
-            fan_in, _ = init._calculate_fan_in_and_fan_out(self.weight)
-            bound = 1 / math.sqrt(fan_in)
+            bound = 1 / math.sqrt(self.in_features)
             self.bias.uniform_(-bound, bound)
 
     def forward(self, input):
