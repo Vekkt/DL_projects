@@ -38,8 +38,9 @@ def compute_nb_errors(model, data_input, data_target, mini_batch_size=100, one_h
 
 def train_model(model, train_input, train_target, mini_batch_size=100, one_hot=False):
     creterion = MSELoss(model) if not one_hot else CrossEntropyLoss(model)
-    optimizer = SGD(model.parameters(), momentum=0.)
-    nb_epochs = 100
+    lr = 0.5e-3 if not one_hot else 1e-3
+    optimizer = SGD(model.parameters(), lr=lr, momentum=0.5)
+    nb_epochs = 250
     l = []
 
     for _ in tqdm(range(nb_epochs)):
