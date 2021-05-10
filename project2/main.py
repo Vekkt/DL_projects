@@ -71,7 +71,7 @@ def train_model(model, train_input, train_target, mini_batch_size=100, one_hot=F
 
 set_grad_enabled(False)
 
-nb_test, nb_epochs = 100, 200
+nb_test, nb_epochs = 10, 200
 mse_test_error, cross_test_error = 0., 0.
 loss_mse, loss_cross = np.zeros(nb_epochs), np.zeros(nb_epochs)
 
