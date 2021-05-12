@@ -32,9 +32,7 @@ def log_softmax(x):
     return softmax(x).log()
 
 def cross_entropy(x, y):
-    p = x.new_zeros(y.size(0), x.size(1)).scatter(1, y.view(-1, 1), 1)
-    return p.mul(log_softmax(x)).mean(axis=0).sum().mul(-1)
+    return y.mul(log_softmax(x)).mean(axis=0).sum().mul(-1)
 
 def dcross_entropy(x, y):
-    p = x.new_zeros(y.size(0), x.size(1)).scatter(1, y.view(-1, 1), 1)
-    return softmax(x).sub(p)
+    return softmax(x).sub(y)
