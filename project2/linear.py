@@ -37,7 +37,7 @@ class Linear(Module):
         due to model.zero_grad()
         so add_ simply updates the tensor'''
         if self.bias is not None:
-            self.bias_grad.add_(gradwrtoutput.mean(axis=0))
+            self.bias_grad.add_(gradwrtoutput.mean())
         
         if self._input.dim() == 1: # if we process a single sample
             self.weight_grad.add_(gradwrtoutput.outer(self._input))
