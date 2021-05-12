@@ -30,7 +30,13 @@ class MSELoss(Loss):
         super(MSELoss, self).__init__(
             model, F.mse, F.dmse)
 
+    def __repr__(self):
+        return "MSE Loss"
+
 class CrossEntropyLoss(Loss):
     def __init__(self, model):
         super(CrossEntropyLoss, self).__init__(
             model, F.cross_entropy, F.dcross_entropy)
+
+    def __repr__(self):
+        return "Cross-Entropy Loss"
