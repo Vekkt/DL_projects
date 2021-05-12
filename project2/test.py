@@ -68,7 +68,11 @@ def train_model(model, train_input, train_target, mini_batch_size=100, one_hot=F
 
 set_grad_enabled(False)
 
+# Change this to choose between MSE and Cross-Entropy
+# One hot enabled = Cross Entropy
+# One hot disabled = MSE
 one_hot = False
+
 train_input, train_target = generate_disc_set(1000, one_hot)
 test_input, test_target = generate_disc_set(1000, one_hot)
 
