@@ -128,3 +128,13 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .DS_Store
+data/mnist/MNIST/processed/test.pt
+data/mnist/MNIST/raw/t10k-images-idx3-ubyte
+data/mnist/MNIST/raw/t10k-images-idx3-ubyte.gz
+data/mnist/MNIST/raw/train-images-idx3-ubyte.gz
+data/mnist/MNIST/raw/train-images-idx3-ubyte
+data/mnist/MNIST/raw/t10k-labels-idx1-ubyte
+data/mnist/MNIST/raw/t10k-labels-idx1-ubyte.gz
+data/mnist/MNIST/raw/train-labels-idx1-ubyte
+data/mnist/MNIST/raw/train-labels-idx1-ubyte.gz
+data/mnist/MNIST/processed/training.pt
