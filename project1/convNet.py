@@ -37,6 +37,7 @@ class PairNet(nn.Module):
         self.weight_sharing = weight_sharing
 
         self.net1 = DigiNet()
+        # Network-level weight sharing
         self.net2 = self.net1 if weight_sharing else DigiNet()
         self.feature_classifier = nn.Linear(100, 1)
 
