@@ -24,11 +24,14 @@ class DigiNet(nn.Module):
             nn.ReLU()
         )
 
+        self.net = nn.Sequential(
+            self.feature_extractor,
+            nn.Flatten(),
+            self.feature_classifier
+        )
+
     def forward(self, input):
-        x = self.feature_extractor(input)
-        x = x.flatten(start_dim=1)
-        x = self.feature_classifier(x)
-        return x
+        return self.net(input)
 
 class PairNet(nn.Module):
     def __init__(self, aux_loss=False, weight_sharing=False):
@@ -39,7 +42,10 @@ class PairNet(nn.Module):
         self.net1 = DigiNet()
         # Network-level weight sharing
         self.net2 = self.net1 if weight_sharing else DigiNet()
-        self.feature_classifier = nn.Linear(100, 1)
+        self.feature_classifier = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(100, 1)
+        )
 
     def forward(self, input):
         image1, image2 = input[:100].split(1, dim=1)
@@ -50,8 +56,7 @@ class PairNet(nn.Module):
         # We could (but it my be bad) to predict the digit
         # by directly taking the argmax of digit1 and digit2
         # (i.e. index of the maximum value, between 0 et 9)
-        x = torch.bmm(digit1[:, :, None], digit2[:, None, :])
-        x = x.flatten(start_dim=1)
+        x = torch.bmm(digit1.unsqueeze(2), digit2.unsqueeze(1))
         res = self.feature_classifier(x)
 
         if self.aux_loss:
