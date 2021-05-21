@@ -53,9 +53,10 @@ class PairNet(nn.Module):
         digit2 = self.net1(image2)
 
         # I used another feature classifier here
-        # We could (but it my be bad) to predict the digit
+        # We could (but it my be bad) predict the digit
         # by directly taking the argmax of digit1 and digit2
-        # (i.e. index of the maximum value, between 0 et 9)
+        # (i.e. index of the maximum value, between 0 et 9).
+        # We could also use a more complex classifier.
         x = torch.bmm(digit1.unsqueeze(2), digit2.unsqueeze(1))
         res = self.feature_classifier(x)
 
