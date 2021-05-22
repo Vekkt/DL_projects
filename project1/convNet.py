@@ -50,7 +50,7 @@ class PairNet(nn.Module):
     def forward(self, input):
         image1, image2 = input[:100].split(1, dim=1)
         digit1 = self.net1(image1)
-        digit2 = self.net1(image2)
+        digit2 = self.net2(image2)
 
         # I used another feature classifier here
         # We could (but it my be bad) predict the digit
