@@ -76,25 +76,18 @@ def compute_nb_errors(model, input, target, mini_batch_size):
 
 ###############################################################################
 
-names = [
-    'Vanilla',
-    'Auxiliary Loss',
-    'Weight Sharing',
-    'Auxiliary Loss + Weight Sharing'
-]
-
-nb_rounds, nb_epochs = 15, 25
-train_loss = np.zeros((len(names), nb_epochs))
-train_accuracy = np.zeros((len(names), nb_epochs))
-test_error = np.zeros(len(names))
+nb_rounds, nb_epochs, nb_models = 15, 25, 4
+train_loss = np.zeros((nb_models, nb_epochs))
+train_accuracy = np.zeros((nb_models, nb_epochs))
+test_error = np.zeros(nb_models)
 
 for round in range(nb_rounds):
-    models = [
-        PairNet(aux_loss=False, weight_sharing=False),
-        PairNet(aux_loss=True, weight_sharing=False),
-        PairNet(aux_loss=False, weight_sharing=True),
-        PairNet(aux_loss=True, weight_sharing=True)
-    ]
+    models = {
+        'Vanilla' : PairNet(aux_loss=False, weight_sharing=False),
+        'Auxiliary Loss' : PairNet(aux_loss=True, weight_sharing=False),
+        'Weight Sharing' : PairNet(aux_loss=False, weight_sharing=True),
+        'Auxiliary Loss + Weight Sharing' : PairNet(aux_loss=True, weight_sharing=True)
+    }
 
     data = generate_pair_sets(1000)
     train_input, train_target, train_classes = data[:3]
@@ -104,7 +97,7 @@ for round in range(nb_rounds):
     test_classes = to_one_hot(test_input, test_classes)
 
     print(f'{round=}')
-    for i, model in enumerate(models):
+    for i, (_, model) in enumerate(models.items()):
         loss, accuracy = train_model(
             model, train_input, train_target, train_classes, 100, nb_epochs)
         error = compute_nb_errors(
@@ -117,15 +110,15 @@ for round in range(nb_rounds):
 
 fig, axs = plt.subplots(nrows=1, ncols=2, constrained_layout=True, figsize=(10, 5))
 
-for i in range(len(models)):
-    model    = models[i]
+for i, (name, model) in enumerate(models.items()):
+    model    = model
     accuracy = train_accuracy[i] / nb_rounds
     loss     = train_loss[i] / nb_rounds
     error    = test_error[i]
 
     print(f"\n{model.aux_loss=}, {model.weight_sharing=} | {error=:.2f}%")
-    axs[0].plot(loss, label=names[i])
-    axs[1].plot(accuracy, label=names[i])
+    axs[0].plot(loss, label=name)
+    axs[1].plot(accuracy, label=name)
 
 axs[0].legend()
 axs[1].legend()
