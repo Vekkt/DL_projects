@@ -1,5 +1,6 @@
 
 import matplotlib.pyplot as plt
+import numpy as np
 import torch
 
 from torch import optim
@@ -75,21 +76,6 @@ def compute_nb_errors(model, input, target, mini_batch_size):
 
 ###############################################################################
 
-
-data = generate_pair_sets(1000)
-train_input, train_target, train_classes = data[:3]
-test_input, test_target, test_classes = data[3:]
-
-train_classes = to_one_hot(train_input, train_classes)
-test_classes = to_one_hot(test_input, test_classes)
-
-models = [
-    PairNet(aux_loss=False, weight_sharing=False),
-    PairNet(aux_loss=True, weight_sharing=False),
-    PairNet(aux_loss=False, weight_sharing=True),
-    PairNet(aux_loss=True, weight_sharing=True)
-]
-
 names = [
     'Vanilla',
     'Auxiliary Loss',
@@ -97,13 +83,47 @@ names = [
     'Auxiliary Loss + Weight Sharing'
 ]
 
+nb_rounds, nb_epochs = 15, 25
+train_loss = np.zeros((len(names), nb_epochs))
+train_accuracy = np.zeros((len(names), nb_epochs))
+test_error = np.zeros(len(names))
+
+for round in range(nb_rounds):
+    models = [
+        PairNet(aux_loss=False, weight_sharing=False),
+        PairNet(aux_loss=True, weight_sharing=False),
+        PairNet(aux_loss=False, weight_sharing=True),
+        PairNet(aux_loss=True, weight_sharing=True)
+    ]
+
+    data = generate_pair_sets(1000)
+    train_input, train_target, train_classes = data[:3]
+    test_input, test_target, test_classes = data[3:]
+
+    train_classes = to_one_hot(train_input, train_classes)
+    test_classes = to_one_hot(test_input, test_classes)
+
+    print(f'{round=}')
+    for i, model in enumerate(models):
+        loss, accuracy = train_model(
+            model, train_input, train_target, train_classes, 100, nb_epochs)
+        error = compute_nb_errors(
+            model, test_input, test_target, 100) / len(test_input) * 100
+
+        train_loss[i]     = train_loss[i] + np.array(loss)
+        train_accuracy[i] = train_accuracy[i] + np.array(accuracy)
+        test_error[i]     = error
+
+
 fig, axs = plt.subplots(nrows=1, ncols=2, constrained_layout=True, figsize=(10, 5))
 
-for i, model in enumerate(models):
-    loss, accuracy = train_model(model, train_input, train_target, train_classes, 100, nb_epochs=25)
-    error = compute_nb_errors(model, test_input, test_target, 100) / len(test_input) * 100
+for i in range(len(models)):
+    model    = models[i]
+    accuracy = train_accuracy[i] / nb_rounds
+    loss     = train_loss[i] / nb_rounds
+    error    = test_error[i]
 
-    print(f"\n{model.aux_loss=}, {model.weight_sharing=} | {error=:.2f}%\n")
+    print(f"\n{model.aux_loss=}, {model.weight_sharing=} | {error=:.2f}%")
     axs[0].plot(loss, label=names[i])
     axs[1].plot(accuracy, label=names[i])
 
@@ -113,5 +133,6 @@ axs[0].set_xlabel('Epochs')
 axs[1].set_xlabel('Epochs')
 axs[0].set_ylabel('Training Loss')
 axs[1].set_ylabel('Training Accuracy (%)')
+
 plt.savefig('convnet_results.pdf')
 plt.show()
