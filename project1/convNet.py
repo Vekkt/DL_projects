@@ -21,7 +21,8 @@ class DigiNet(nn.Module):
             nn.Linear(120, 84),
             nn.ReLU(),
             nn.Linear(84, 10),
-            nn.ReLU()
+            nn.ReLU(),
+            nn.Flatten()
         )
 
         self.net = nn.Sequential(
@@ -49,20 +50,20 @@ class PairNet(nn.Module):
 
     def forward(self, input):
         image1, image2 = input[:100].split(1, dim=1)
-        digit1 = self.net1(image1)
-        digit2 = self.net2(image2)
+        output1 = self.net1(image1)
+        output2 = self.net2(image2)
 
         # I used another feature classifier here
         # We could (but it my be bad) predict the digit
         # by directly taking the argmax of digit1 and digit2
         # (i.e. index of the maximum value, between 0 et 9).
         # We could also use a more complex classifier.
-        x = torch.bmm(digit1.unsqueeze(2), digit2.unsqueeze(1))
-        res = self.feature_classifier(x)
+        x = torch.bmm(output1.unsqueeze(2), output2.unsqueeze(1))
+        res = self.feature_classifier(x).flatten()
 
         if self.aux_loss:
-            return res, digit1, digit2
+            return res.float(), torch.cat((output1.unsqueeze(1), output2.unsqueeze(1)), 1).float()
         else:
-            return res
+            return res.float()
 
 
