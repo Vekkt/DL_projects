@@ -138,3 +138,14 @@ data/mnist/MNIST/raw/t10k-labels-idx1-ubyte.gz
 data/mnist/MNIST/raw/train-labels-idx1-ubyte
 data/mnist/MNIST/raw/train-labels-idx1-ubyte.gz
 data/mnist/MNIST/processed/training.pt
+
+project1/data/mnist/MNIST/processed/test.pt
+project1/data/mnist/MNIST/raw/t10k-images-idx3-ubyte
+project1/data/mnist/MNIST/raw/t10k-images-idx3-ubyte.gz
+project1/data/mnist/MNIST/raw/train-images-idx3-ubyte.gz
+project1/data/mnist/MNIST/raw/train-images-idx3-ubyte
+project1/data/mnist/MNIST/raw/t10k-labels-idx1-ubyte
+project1/data/mnist/MNIST/raw/t10k-labels-idx1-ubyte.gz
+project1/data/mnist/MNIST/raw/train-labels-idx1-ubyte
+project1/data/mnist/MNIST/raw/train-labels-idx1-ubyte.gz
+project1/data/mnist/MNIST/processed/training.pt
