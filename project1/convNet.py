@@ -21,7 +21,7 @@ class DigiNet(nn.Module):
             nn.Linear(120, 84),
             nn.ReLU(),
             nn.Linear(84, 10),
-            nn.ReLU(),
+            nn.Softmax(dim=1),
             nn.Flatten()
         )
 

@@ -8,25 +8,24 @@ from torch import optim, nn
 def to_one_hot(input, target):
     size = tuple(target.size()) + (int(target.max() + 1),)
     tmp = input.new_zeros(size)
-    tmp.scatter_(tmp.dim()-1, target.unsqueeze(tmp.dim()-2), 1.0).size()
+    tmp.scatter_(tmp.dim()-1, target.unsqueeze(tmp.dim()-1), 1.0)
     return tmp
 
 
 def train_model(model, input, target, target_classes, mini_batch_size, nb_epochs=25):
     criterion = torch.nn.MSELoss()
     criterion_aux = torch.nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.01)
+    optimizer = optim.SGD(model.parameters(), lr=0.05, momentum=0.9)
 
     for _ in tqdm(range(nb_epochs)):
         # Train
         epoch_loss = 0
         epoch_accuracy = 0
         for b in range(0, input.size(0), mini_batch_size):
-            x = input.narrow(0, b, mini_batch_size)
             if model.aux_loss:
-                prediction, classes = model(x)
+                prediction, classes = model(input.narrow(0, b, mini_batch_size))
             else:
-                prediction = model(x)
+                prediction = model(input.narrow(0, b, mini_batch_size))
             loss = criterion(prediction, target.narrow(0, b, mini_batch_size).float())
             
             model.zero_grad()
@@ -65,9 +64,16 @@ test_input, test_target, test_classes = data[3:]
 train_classes = to_one_hot(train_input, train_classes)
 test_classes = to_one_hot(test_input, test_classes)
 
-model = PairNet(aux_loss=True)
+models = [
+    PairNet(aux_loss=False, weight_sharing=False),
+    PairNet(aux_loss=True, weight_sharing=False),
+    PairNet(aux_loss=False, weight_sharing=True),
+    PairNet(aux_loss=True, weight_sharing=True)
+]
 
-train_model(model, train_input, train_target, train_classes, 100, nb_epochs=25)
-errors = compute_nb_errors(model, test_input, test_target, 100)
+for model in models:
+    train_model(model, train_input, train_target, train_classes, 100, nb_epochs=25)
+    errors = compute_nb_errors(model, test_input, test_target, 100)
 
-print(test_classes[0], model(test_input)[1][0])
+    print(
+        f"{model.aux_loss=}, {model.weight_sharing=} error = {errors / len(test_input) * 100:.2f}%\n\n")
