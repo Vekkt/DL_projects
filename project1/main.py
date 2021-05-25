@@ -31,15 +31,12 @@ def train_model(model, input, target, target_classes, mini_batch_size, nb_epochs
     for _ in tqdm(range(nb_epochs)):
         epoch_loss, epoch_accuracy = 0, 0
         for b in range(0, input.size(0), mini_batch_size):
-            input_batch = input.narrow(0, b, mini_batch_size)
+            input_batch  = input.narrow(0, b, mini_batch_size)
             target_batch = target.narrow(0, b, mini_batch_size)
 
-            if model.aux_loss:
-                prediction, classes = model(input_batch)
-            else:
-                prediction = model(input_batch)
+            prediction, classes = model(input_batch)
 
-            loss = criterion(prediction, target_batch.float())
+            loss     = criterion(prediction, target_batch.float())
             accuracy = ((prediction > 0.5) == target_batch).sum()
             
             model.zero_grad()
@@ -47,7 +44,7 @@ def train_model(model, input, target, target_classes, mini_batch_size, nb_epochs
             if model.aux_loss:
                 classes_batch = target_classes.narrow(0, b, mini_batch_size)
                 aux_loss = criterion_aux(classes, classes_batch)
-                loss += aux_loss
+                loss  += aux_loss
 
             loss.backward()
             optimizer.step()
@@ -63,10 +60,7 @@ def train_model(model, input, target, target_classes, mini_batch_size, nb_epochs
 def compute_nb_errors(model, input, target, mini_batch_size):
     nb_errors = 0
     for b in range(0, input.size(0), mini_batch_size):
-        if model.aux_loss:
-            prediction, _ = model(input.narrow(0, b, mini_batch_size))
-        else:
-            prediction = model(input.narrow(0, b, mini_batch_size))
+        prediction, _ = model(input.narrow(0, b, mini_batch_size))
         predicted_target = torch.empty(prediction.size())
         for k in range(mini_batch_size):
             predicted_target[k] = 0.0 if prediction[k] < 0.5 else 1.0
@@ -76,22 +70,23 @@ def compute_nb_errors(model, input, target, mini_batch_size):
 
 ###############################################################################
 
-nb_rounds, nb_epochs, nb_models = 15, 25, 4
-train_loss = np.zeros((nb_models, nb_epochs))
+nb_rounds, nb_epochs, nb_models, batch_size = 20, 25, 4, 100
+
+train_loss     = np.zeros((nb_models, nb_epochs))
 train_accuracy = np.zeros((nb_models, nb_epochs))
-test_error = np.zeros(nb_models)
+test_error     = np.zeros(nb_models)
 
 for round in range(nb_rounds):
     models = {
-        'Vanilla' : PairNet(aux_loss=False, weight_sharing=False),
-        'Auxiliary Loss' : PairNet(aux_loss=True, weight_sharing=False),
-        'Weight Sharing' : PairNet(aux_loss=False, weight_sharing=True),
-        'Auxiliary Loss + Weight Sharing' : PairNet(aux_loss=True, weight_sharing=True)
+        'Vanilla'                        : PairNet(False, False),
+        'Auxiliary Loss'                 : PairNet(True , False),
+        'Weight Sharing'                 : PairNet(False, True),
+        'Auxiliary Loss + Weight Sharing': PairNet(True , True)
     }
 
     data = generate_pair_sets(1000)
     train_input, train_target, train_classes = data[:3]
-    test_input, test_target, test_classes = data[3:]
+    test_input , test_target,  test_classes  = data[3:]
 
     train_classes = to_one_hot(train_input, train_classes)
     test_classes = to_one_hot(test_input, test_classes)
@@ -99,13 +94,17 @@ for round in range(nb_rounds):
     print(f'{round=}')
     for i, (_, model) in enumerate(models.items()):
         loss, accuracy = train_model(
-            model, train_input, train_target, train_classes, 100, nb_epochs)
-        error = compute_nb_errors(
-            model, test_input, test_target, 100) / len(test_input) * 100
+            model, 
+            train_input, train_target, 
+            train_classes, 
+            batch_size, nb_epochs
+        )
+        errors = compute_nb_errors(model, test_input, test_target, 100)
 
-        train_loss[i]     = train_loss[i] + np.array(loss)
-        train_accuracy[i] = train_accuracy[i] + np.array(accuracy)
-        test_error[i]     = error
+        with torch.no_grad():
+            train_loss    [i] = train_loss[i] + np.array(loss)
+            train_accuracy[i] = train_accuracy[i] + np.array(accuracy)
+            test_error    [i] = errors / len(test_input) * 100
 
 
 fig, axs = plt.subplots(nrows=1, ncols=2, constrained_layout=True, figsize=(10, 5))

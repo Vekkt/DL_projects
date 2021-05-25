@@ -51,6 +51,7 @@ class PairNet(nn.Module):
         image1, image2 = input[:100].split(1, dim=1)
         output1 = self.net1(image1)
         output2 = self.net2(image2)
+        aux = torch.cat((output1.unsqueeze(1), output2.unsqueeze(1)), 1)
 
         # I used another feature classifier here
         # We could (but it my be bad) predict the digit
@@ -60,9 +61,6 @@ class PairNet(nn.Module):
         x = torch.bmm(output1.unsqueeze(2), output2.unsqueeze(1))
         res = self.feature_classifier(x).flatten()
 
-        if self.aux_loss:
-            return res.float(), torch.cat((output1.unsqueeze(1), output2.unsqueeze(1)), 1).float()
-        else:
-            return res.float()
+        return res.float(), aux.float()
 
 
